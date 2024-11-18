@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>угадай слово!</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        var words = [
+    "лес",
+    "дерево",
+    "лиса",
+    "домик",
+    "собака",
+    "воробей",
+    "медведь",
+    "озеро"
+];
+
+// Случайное слово
+var word = words[Math.floor(Math.random() * words.length)];
+// Итоговый массив
+var answerArray = [];
+for (var i = 0; i < word.length; i++) {
+    answerArray[i] = "_";
+}
+
+var remainingLetters = word.length;
+var maxAttempts = 6; // Максимальное количество попыток
+var attempts = 0; // Подсчет неверных попыток
+
+// Игровой цикл
+while (remainingLetters > 0 && attempts < maxAttempts) {
+    // Показываем состояние игры
+    alert(answerArray.join(" ") + "\nПопыток осталось: " + (maxAttempts - attempts));
+
+    // Запрашиваем варианты ответа
+    var guess = prompt("Угадайте букву или нажмите Отмена для выхода из игры");
+    if (guess === null) {
+        break; // Выход из игры
+    } else if (guess.length !== 1) {
+        alert("Пожалуйста, введите только одну букву");
+    } else {
+        // Преобразуем введённую букву в строчный регистр
+        guess = guess.toLowerCase();
+        var correctGuess = false; // Флаг для отслеживания правильного угадывания
+        var alreadyGuessed = false; // Флаг для проверки, была ли буква уже угадана
+
+        // Обновляем состояние игры
+        for (var j = 0; j < word.length; j++) {
+            if (word[j] === guess) {
+                if (answerArray[j] === "_") {
+                    answerArray[j] = guess; // Угаданная буква
+                    remainingLetters--; // Уменьшаем количество оставшихся букв
+                    correctGuess = true; // Установить флаг, если буква угадана
+                } else {
+                    alreadyGuessed = true; // Буква уже была угадана
+                }
+            }
+        }
+
+        // Обработка результата
+        if (correctGuess) {
+            // Если буква угадана
+            alert("Правильно!");
+        } else if (alreadyGuessed) {
+            // Если буква уже была угадана
+            alert("Вы уже угадали эту букву.");
+        } else {
+            // Если буква не угадана, увеличиваем счетчик попыток
+            attempts++;
+            alert("Неверно! У вас осталось " + (maxAttempts - attempts) + " попыток.");
+        }
+    }
+}
+
+// Конец игры
+if (remainingLetters === 0) {
+    alert("Отлично! Было загадано слово " + word);
+} else {
+    alert("Вы исчерпали все попытки. Загаданное слово было: " + word);
+}
+    </script>
+</body>
+</html>
